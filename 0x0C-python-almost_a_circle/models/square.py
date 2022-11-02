@@ -1,65 +1,69 @@
 #!/usr/bin/python3
-"""
-Contains the "Square" class
-"""
-
+'''Almost a circle project'''
 from models.rectangle import Rectangle
 
 
 class Square(Rectangle):
-    """Square class"""
+    '''
+    Class that inherits Rectangle
+    '''
     def __init__(self, size, x=0, y=0, id=None):
-        """Initializes Square"""
+        '''
+        Instantiatior
+        '''
         super().__init__(size, size, x, y, id)
 
     def __str__(self):
-        """string representation of the Rectangle"""
-        return "[Square] ({:d}) {:d}/{:d} - {:d}".format(self.id, self.x,
-                                                         self.y, self.width)
+        '''
+        Setting str representation
+        '''
+        return '[Square] ({}) {}/{} - {}'\
+            .format(self.id, self.x, self.y, self.width)
 
+    '''Getter'''
     @property
     def size(self):
-        """size getter"""
         return self.width
 
+    '''Setter'''
     @size.setter
     def size(self, value):
-        """size setter"""
-        if type(value) is not int:
-            raise TypeError("width must be an integer")
-        if value <= 0:
-            raise ValueError("width must be > 0")
         self.width = value
         self.height = value
 
+    '''
+    Public Methods
+    '''
     def update(self, *args, **kwargs):
-        """assigns a key/value argument to attributes"""
-        if args and len(args):
-            for i, elm in enumerate(args):
-                if i == 0:
-                    self.id = elm
-                elif i == 1:
-                    self.size = elm
-                elif i == 2:
-                    self.x = elm
-                elif i == 3:
-                    self.y = elm
+        '''
+        that assigns attributes
+        '''
+        attrs = ['id', 'size', 'x', 'y']
+        if args and len(args) > 0:
+            for i in range(len(args)):
+                if i == 1:
+                    setattr(self, 'width', args[i])
+                    setattr(self, 'height', args[i])
+                else:
+                    setattr(self, attrs[i], args[i])
         else:
-            if "id" in kwargs:
-                self.id = kwargs["id"]
-            if "size" in kwargs:
-                self.size = kwargs["size"]
-            if "x" in kwargs:
-                self.x = kwargs["x"]
-            if "y" in kwargs:
-                self.y = kwargs["y"]
+            for key, value in kwargs.items():
+                if key == 'size':
+                    setattr(self, 'width', value)
+                    setattr(self, 'height', value)
+                else:
+                    setattr(self, key, value)
 
     def to_dictionary(self):
-        """returns the dictionary representation of a Square"""
-        square_dict = {}
-        square_dict["id"] = self.id
-        square_dict["size"] = self.size
-        square_dict["x"] = self.x
-        square_dict["y"] = self.y
-        return square_dict
-Footer
+        '''
+        returns the dictionary representation
+        of a Square instance
+        '''
+        attrs = ['id', 'size', 'x', 'y']
+        new_dict = {}
+        for key in attrs:
+            if key == 'size':
+                new_dict[key] = getattr(self, 'width')
+            else:
+                new_dict[key] = getattr(self, key)
+        return new_dict
